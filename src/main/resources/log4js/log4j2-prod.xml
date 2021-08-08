@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" packages="com.rental.mon">
+    <Appenders>
+        <Console name="LogToConsole"
+                 direct="true"
+                 target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%-5level} [%yellow{%c{1.}.%method:%line}] %msg%n"/>
+        </Console>
+        <RollingFile name="LogToRollingFile"
+                     append="true"
+                     bufferSize="8192"
+                     fileName="./logs/app-debug/app-debug.log"
+                     filePattern="./logs/app-debug/app-debug-%d{yyyyMMdd}.log.gz">
+            <PatternLayout>
+                <Pattern>{"dt":"%d{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}", "msg":"%msg"}%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <!--SizeBasedTriggeringPolicy size="100 MB"/-->
+            </Policies>
+            <DefaultRolloverStrategy max="30" />
+        </RollingFile>
+        <Async name="AsyncConsoleLogging"
+               bufferSize="512"
+               blocking="false"
+               includeLocation="true"
+               shutdownTimeout="150">
+            <AppenderRef ref="LogToConsole"/>
+        </Async>
+        <Async name="AsyncFileLogging"
+               bufferSize="32768"
+               blocking="false"
+               includeLocation="true"
+               shutdownTimeout="800">
+            <AppenderRef ref="LogToRollingFile"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO" >
+            <AppenderRef ref="AsyncConsoleLogging"/>
+            <AppenderRef ref="AsyncFileLogging"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
