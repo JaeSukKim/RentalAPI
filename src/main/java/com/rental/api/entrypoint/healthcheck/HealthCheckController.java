@@ -23,10 +23,9 @@ public class HealthCheckController {
                                                  HttpServletRequest request) {
 
         command.setClientIp(request.getRemoteAddr());
-        String uri = "/health-check";
-        log.info("URI : {}, Request : {}" , uri, command);
+        log.info("URI : {}, Request : {}" , request.getRequestURI(), command);
 
         HealthCheckUsecase.Result result = healthCheckUsecase.execute(command);
-        return RestApiResponse.ok(uri, command, result, false);
+        return RestApiResponse.ok(request.getRequestURI(), command, result, false);
     }
 }

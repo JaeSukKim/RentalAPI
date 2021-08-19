@@ -22,11 +22,10 @@ public class LoginController {
     public LoginUsecase.Result login(@RequestBody @Validated LoginUsecase.Command command,
                                                      HttpServletRequest request) {
 
-        String uri = "/login";
-        log.info("URI : {}, Request : {}" , uri, command);
+        log.info("URI : {}, Request : {}" , request.getRequestURI(), command);
 
         LoginUsecase.Result result = loginUsecase.execute(command);
-        return RestApiResponse.ok(uri, command, result, true);
+        return RestApiResponse.ok(request.getRequestURI(), command, result, true);
 
     }
 }

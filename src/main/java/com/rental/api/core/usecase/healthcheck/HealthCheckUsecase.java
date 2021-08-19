@@ -92,8 +92,7 @@ public class HealthCheckUsecase implements IUsecase<Command, Result> {
         result.setDevice(updateDeviceInfo);
 
         // step2. check IP and update IP history
-        if (!Objects.equals(updateDeviceInfo.getInternalIp(), deviceInfoDomain.getInternalIp())
-            || !Objects.equals(updateDeviceInfo.getExternalIp(), deviceInfoDomain.getExternalIp())) {
+        if (!Objects.equals(updateDeviceInfo.getExternalIp(), deviceInfoDomain.getExternalIp())) {
 
             DeviceIpHistoryDomain deviceIpHistoryDomain = DeviceIpHistoryDomain.builder()
                     .deviceId(deviceInfoDomain.getDeviceId())

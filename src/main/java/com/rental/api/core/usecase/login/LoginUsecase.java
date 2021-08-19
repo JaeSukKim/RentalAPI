@@ -80,6 +80,8 @@ public class LoginUsecase implements IUsecase<Command, Result> {
         @JsonProperty("wireless-lan-adapter-mac")
         private String wirelessLanAdapterMac;    //무선 LAN 어댑터 물리적 주소
 
+        @JsonProperty("local-version")
+        private String localVersion;
     }
 
     @NoArgsConstructor
