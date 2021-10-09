@@ -25,6 +25,7 @@ public class DeviceInfoRepositoryTest {
     private final String MAC2 = "18:67:B0:3C:F2:91";
     private final String INTERNAL_IP = "192.168.0.100";
     private final String EXTERNAL_IP = "212.230.24.21";
+    private final String NEW_EXTERNAL_IP = "212.230.24.22";
 
     @Test
     @Order(0)
@@ -59,8 +60,10 @@ public class DeviceInfoRepositoryTest {
                 .deviceInfo(DeviceInfo.builder()
                         .deviceId(deviceInfo.getDeviceId())
                         .build())
-                .externalIp(deviceInfo.getExternalIp())
-                .internalIp(deviceInfo.getInternalIp())
+                .oldExternalIp(deviceInfo.getExternalIp())
+                .oldInternalIp(deviceInfo.getInternalIp())
+                .newExternalIp(NEW_EXTERNAL_IP)
+                .newInternalIp(deviceInfo.getInternalIp())
                 .build();
 
         DeviceIpHistory savedDeviceIpHistory = deviceIpHistoryRepository.save(deviceIpHistory);

@@ -96,13 +96,20 @@ public class HealthCheckUsecase implements IUsecase<Command, Result> {
 
             DeviceIpHistoryDomain deviceIpHistoryDomain = DeviceIpHistoryDomain.builder()
                     .deviceId(deviceInfoDomain.getDeviceId())
-                    .externalIp(deviceInfoDomain.getExternalIp())
-                    .internalIp(deviceInfoDomain.getInternalIp())
+                    .oldExternalIp(deviceInfoDomain.getExternalIp())
+                    .oldInternalIp(deviceInfoDomain.getInternalIp())
+                    .newExternalIp(updateDeviceInfo.getExternalIp())
+                    .newInternalIp(updateDeviceInfo.getInternalIp())
                     .build();
             deviceIpHistoryDomain = deviceInfoDataprovider.saveDeviceIpHistory(deviceIpHistoryDomain);
             if (Objects.isNull(deviceIpHistoryDomain)) {
-                log.error("Failed to save changed IP data : from[{}, {}]",
-                        deviceInfoDomain.getExternalIp(), deviceInfoDomain.getInternalIp());
+                log.error("Failed to save changed IP data : from[{}, {}] - to[{}, {}]",
+                        deviceInfoDomain.getExternalIp(), deviceInfoDomain.getInternalIp(),
+                        updateDeviceInfo.getExternalIp(), updateDeviceInfo.getInternalIp());
+            } else {
+                log.info("Success to save changed IP data : from[{}, {}] - to[{}, {}]",
+                        deviceInfoDomain.getExternalIp(), deviceInfoDomain.getInternalIp(),
+                        updateDeviceInfo.getExternalIp(), updateDeviceInfo.getInternalIp());
             }
         }
 
@@ -122,6 +129,10 @@ public class HealthCheckUsecase implements IUsecase<Command, Result> {
                 log.error("Failed to save changed MAC data : from[{}, {}] - to[{}, {}]",
                         deviceInfoDomain.getMac1(), deviceInfoDomain.getMac2(),
                         updateDeviceInfo.getMac1(), updateDeviceInfo.getMac2());
+            } else {
+                log.info("Success to save changed MAC data : from[{}, {}] - to[{}, {}]",
+                        deviceInfoDomain.getMac1(), deviceInfoDomain.getMac2(),
+                        updateDeviceInfo.getMac1(), updateDeviceInfo.getMac2());
             }
         }
 
@@ -136,7 +147,7 @@ public class HealthCheckUsecase implements IUsecase<Command, Result> {
         }
 
         Duration duration = Duration.between(deviceInfoDomain.getLatestConnTime(), updateDeviceInfo.getLatestConnTime());
-        // 2분이내 : 최신 커맨드
+        // 3분이내 : 최신 커맨드
         if (duration.getSeconds() < 180) {
             if (cmdInfoDomains.size() > 1) {
                 CmdInfoDomain lastCmdInfoDomain = cmdInfoDomains.get(cmdInfoDomains.size()-1);
@@ -152,7 +163,7 @@ public class HealthCheckUsecase implements IUsecase<Command, Result> {
             return result;
         }
 
-        // 2분이후 : 최신 MSG 커맨드
+        // 3분이후 : 최신 MSG 커맨드
         for (CmdInfoDomain cmdInfoDomain : cmdInfoDomains) {
             if ("msg".equals(cmdInfoDomain.getCommand())) {
                 log.info("Message command exist after 3 minutes. Total command size : {}, Last msg command Info - {}"
@@ -187,6 +198,9 @@ public class HealthCheckUsecase implements IUsecase<Command, Result> {
 
         @JsonProperty("wireless-lan-adapter-ip")
         private String wirelessLanAdapterIp;     //무선 LAN 어댑터 IPv4 주소
+
+        @JsonProperty("local-version")
+        private String localVersion;
     }
 
     @NoArgsConstructor

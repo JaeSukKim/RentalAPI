@@ -31,10 +31,16 @@ public class DeviceIpHistory {
     private DeviceInfo deviceInfo;
 
     @Column(name="external_ip")
-    private String externalIp;
+    private String oldExternalIp;
 
     @Column(name="internal_ip")
-    private String internalIp;
+    private String oldInternalIp;
+
+    @Column(name="new_external_ip")
+    private String newExternalIp;
+
+    @Column(name="new_internal_ip")
+    private String newInternalIp;
 
     @CreatedDate
     @Column(name="changed_time")

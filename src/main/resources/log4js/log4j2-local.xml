@@ -18,7 +18,11 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true" />
                 <!--SizeBasedTriggeringPolicy size="100 MB"/-->
             </Policies>
-            <DefaultRolloverStrategy max="30" />
+            <DefaultRolloverStrategy>
+                <Delete basePath="logs" maxDepth="1">
+                    <IfAccumulatedFileCount exceeds="30"/>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingFile>
         <Async name="AsyncConsoleLogging"
                bufferSize="512"

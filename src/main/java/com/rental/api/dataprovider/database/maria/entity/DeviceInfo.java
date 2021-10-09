@@ -34,10 +34,10 @@ public class DeviceInfo {
     @Column(name="cid")
     private Long contractId;
 
-    @Column(name="mac1", updatable = false)
+    @Column(name="mac1")
     private String mac1;
 
-    @Column(name="mac2", updatable = false)
+    @Column(name="mac2")
     private String mac2;
 
     @Column(name="internal_ip")

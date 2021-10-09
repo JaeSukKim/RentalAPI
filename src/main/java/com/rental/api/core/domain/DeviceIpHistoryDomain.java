@@ -15,8 +15,11 @@ public class DeviceIpHistoryDomain {
 
     private Long deviceIpHistoryId;
     private Long deviceId;
-    private String internalIp;
-    private String externalIp;
+    private String oldInternalIp;
+    private String oldExternalIp;
+    private String newInternalIp;
+    private String newExternalIp;
+
     private LocalDateTime changedTime;
 
 }
