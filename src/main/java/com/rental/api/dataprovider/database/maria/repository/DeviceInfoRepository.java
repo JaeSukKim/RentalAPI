@@ -9,5 +9,6 @@ public interface DeviceInfoRepository extends JpaRepository<DeviceInfo, Long> {
 
     DeviceInfo findByMac1(String mac1);
     DeviceInfo findByMac2(String mac2);
+    DeviceInfo findByMac1AndMac2(String mac1, String mac2);
 }
 

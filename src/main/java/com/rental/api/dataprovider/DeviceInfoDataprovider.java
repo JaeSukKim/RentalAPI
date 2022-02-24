@@ -55,15 +55,28 @@ public class DeviceInfoDataprovider implements IDeviceInfoDataprovider {
 
     @Override
     public DeviceInfoDomain getDeviceInfoByMac(String eMac, String wMac) {
-        DeviceInfo deviceInfo;
+        //wMac O, eMac X : wMac으로만 조회
+        //wMac O, eMac O : wMac + eMac으로 조회 후 없으면 wMac으로만 조회(usb 네트워크 카드 유무에 따라 eMac이 안 넘어올 수도 있음.)
+        //wMac X, eMac O : eMac && null 로 조회
+        //wMac X, eMac X : 조회 불가
+
+        DeviceInfo deviceInfo = null;
         if (StringUtils.hasLength(wMac)) {
-            deviceInfo = deviceInfoRepository.findByMac2(wMac);
-            if (Objects.isNull(deviceInfo) && StringUtils.hasLength(eMac)) {
-                deviceInfo = deviceInfoRepository.findByMac1(eMac);
+            if (StringUtils.hasLength(eMac)) {
+                //wMac O, eMac O
+                deviceInfo = deviceInfoRepository.findByMac1AndMac2(eMac, wMac);
+                if (Objects.isNull(deviceInfo)) {
+                    deviceInfo = deviceInfoRepository.findByMac2(wMac);
+                }
+            } else {
+                //wMac O, eMac X
+                deviceInfo = deviceInfoRepository.findByMac2(wMac);
             }
         } else {
-            deviceInfo = deviceInfoRepository.findByMac1(eMac);
+            //wMac X, eMac O
+            deviceInfo = deviceInfoRepository.findByMac1AndMac2(eMac, null);
         }
+
         if (Objects.isNull(deviceInfo)) {
             return null;
         }
